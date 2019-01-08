@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import sys
 
 dataBaseExists = os.path.isfile('schedule.db')
 dbcon = sqlite3.connect('schedule.db')
@@ -22,7 +23,7 @@ with dbcon:
                        " location TEXT NOT NULL,current_course_id INTEGER NOT NULL,"
                        " current_course_time_left INTEGER NOT NULL)")  # create table classrooms
 
-with open("/users/studs/bsc/2019/shmaxim/Downloads/config2.txt") as f:
+with open(sys.argv[1]) as f:
     ourFile = f.read()
     content = ourFile.split('\n')
 
