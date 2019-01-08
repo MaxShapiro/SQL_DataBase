@@ -1,6 +1,5 @@
 import sqlite3
 import os
-import sys
 
 dataBaseExists = os.path.isfile('schedule.db')
 dbcon = sqlite3.connect('schedule.db')
@@ -8,23 +7,22 @@ dbcon = sqlite3.connect('schedule.db')
 with dbcon:
 
     cursor = dbcon.cursor()
-    if not dataBaseExists  :
+    if not dataBaseExists:
         cursor.execute("CREATE TABLE courses(id INTEGER PRIMARY KEY,"
-                    " course_name TEXT NOT NULL,"
-                    " student TEXT NOT NULL,"
-                    " number_of_students INTEGER NOT NULL, "
-                    "class_id INTEGER REFERENCES classrooms(id),"
-                    " course_length INTEGER NOT NULL )")  # create table courses
+                       " course_name TEXT NOT NULL,"
+                       " student TEXT NOT NULL,"
+                       " number_of_students INTEGER NOT NULL, "
+                       "class_id INTEGER REFERENCES classrooms(id),"
+                       " course_length INTEGER NOT NULL )")  # create table courses
 
         cursor.execute("CREATE TABLE students(grade TEXT PRIMARY KEY,"
-                     " count INTEGER NOT NULL )")  # create table students
+                       " count INTEGER NOT NULL )")  # create table students
 
-        cursor.execute("CREATE TABLE classrooms(id INTEGER PRIMARY KEY ,"
-                       "location TEXT NOT NULL, "
-                       "FOREIGN KEY current_course_id INTEGER NOT NULL references to courses(id), "
-                       "current_course_time_left INTEGER NOT NULL )")  # create table classrooms
+        cursor.execute("CREATE TABLE classrooms(id INTEGER PRIMARY KEY,"
+                       " location TEXT NOT NULL,current_course_id INTEGER NOT NULL,"
+                       " current_course_time_left INTEGER NOT NULL)")  # create table classrooms
 
-with open(sys.argv[1]) as f:
+with open("/home/max/Downloads/config2.txt") as f:
     ourFile = f.read()
     content = ourFile.split('\n')
 
@@ -32,7 +30,7 @@ with open(sys.argv[1]) as f:
 for i in content:
     newList = i.split(', ')
     if newList[0] == "S":
-        cursor.execute("INSERT INTO students(grade,count) VALUES(?,?)", (newList[1], newList[2]))
+        cursor.execute("INSERT INTO students(grade, count) VALUES(?,?)", [newList[1], newList[2]])
     elif newList[0] == "C":
         cursor.execute("INSERT INTO courses(id, course_name, student, number_of_students,"
                        " class_id, course_length) VALUES(?,?,?,?,?,?)", (newList[1], newList[2], newList[3], newList[4], newList[5], newList[6]))
@@ -60,6 +58,4 @@ print('students')
 for student in studentList:
     print(str(student))
 
-
-cursor.execute("SELECT * FROM students")
-print("max",cursor.fetchall())
+dbcon.commit()
