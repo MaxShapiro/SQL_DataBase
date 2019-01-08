@@ -22,7 +22,7 @@ with dbcon:
                        " location TEXT NOT NULL,current_course_id INTEGER NOT NULL,"
                        " current_course_time_left INTEGER NOT NULL)")  # create table classrooms
 
-with open("/home/max/Downloads/config2.txt") as f:
+with open("/users/studs/bsc/2019/shmaxim/Downloads/config2.txt") as f:
     ourFile = f.read()
     content = ourFile.split('\n')
 
